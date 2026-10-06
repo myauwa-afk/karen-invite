@@ -1,0 +1,313 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Karen 的可愛邀約</title>
+  <style>
+    :root{
+      --bg-1:#fffaf6;
+      --bg-2:#fff5ff;
+      --card:#ffffff;
+      --accent:#ff7aa2;
+      --muted:#7a7a86;
+      --ink:#2a2a31;
+      --shadow:0 12px 36px rgba(58,40,90,0.06);
+    }
+    *{box-sizing:border-box}
+    html,body{margin:0;min-height:100%;background:linear-gradient(180deg,var(--bg-1),var(--bg-2));font-family:"Noto Sans TC","Baloo 2",system-ui,-apple-system,Segoe UI,Roboto,Arial;color:var(--ink);-webkit-font-smoothing:antialiased;scroll-behavior:smooth}
+    .wrap{max-width:920px;margin:28px auto;padding:28px;border-radius:20px;background:linear-gradient(180deg,var(--card),#fffafc);box-shadow:var(--shadow);position:relative}
+    header{display:flex;align-items:center;gap:14px}
+    .logo{width:64px;height:64px;border-radius:18px;display:flex;align-items:center;justify-content:center;background:linear-gradient(180deg,#fff1f6,#ffdff0);box-shadow:0 8px 20px rgba(255,122,153,0.12);font-size:28px}
+    h1{margin:0;font-size:22px;font-weight:800}
+    .stage{margin-top:18px;padding:18px;border-radius:14px;background:linear-gradient(180deg,rgba(255,255,255,0.9),#fff);border:1px solid rgba(0,0,0,0.03)}
+    .question{font-size:20px;font-weight:800;margin-bottom:12px;color:#2b2b34}
+    .btn-row{position:relative;height:180px;margin-top:6px}
+    .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;border:0;border-radius:999px;padding:12px 20px;font-size:16px;font-weight:800;cursor:pointer;user-select:none;box-shadow:0 10px 26px rgba(63,42,100,0.08);transition:transform 220ms cubic-bezier(.2,.9,.3,1),box-shadow 160ms ease}
+    .btn:active{transform:translateY(2px)}
+    .btn--primary{background:linear-gradient(180deg,#ff9bbf,#ff6a96);color:white}
+    .btn--soft{background:linear-gradient(180deg,#fff7ef,#fff0e6);color:#3b3b45;border:1px solid rgba(0,0,0,0.03)}
+    #yesBtn{position:relative;z-index:2;transform-origin:center;transition:transform 0.25s ease}
+    #noBtn{position:fixed;z-index:9999;transition:left 360ms cubic-bezier(.2,.9,.3,1), top 360ms cubic-bezier(.2,.9,.3,1);border-radius:999px;padding:10px 16px}
+    .speech{display:inline-block;margin-top:10px;padding:8px 12px;border-radius:12px;background:#fff9ff;border:1px solid rgba(255,120,160,0.06);font-size:13px;color:var(--muted)}
+    .heart{display:inline-block;width:16px;height:16px;position:relative;background:linear-gradient(180deg,#fff,#ff7aa2);transform:rotate(45deg);border-radius:4px;box-shadow:0 6px 18px rgba(255,122,162,0.18)}
+    .heart::before,.heart::after{content:"";position:absolute;width:16px;height:16px;border-radius:50%;background:inherit}
+    .heart::before{left:-8px;top:0}
+    .heart::after{top:-8px;left:0}
+    .hidden{display:none}
+    .tiny{font-size:13px;color:var(--muted);margin-top:10px}
+    input[type="date"]{padding:10px 12px;font-size:15px;border-radius:10px;border:1px solid #eee;background:linear-gradient(180deg,#fff,#fff8fb);outline:none}
+    .food-list{display:flex;flex-wrap:wrap;gap:10px;margin-top:12px}
+    .chip{padding:10px 14px;border-radius:14px;background:linear-gradient(180deg,#fff7fb,#fff2f6);border:1px solid rgba(255,120,160,0.08);cursor:pointer;font-weight:700;transition:transform 160ms ease,box-shadow 160ms ease,user-select:none}
+    .chip:hover{transform:translateY(-4px)}
+    .chip.selected{background:linear-gradient(180deg,#ffdfe9,#ffe8f1);border-color:var(--accent);box-shadow:0 12px 28px rgba(255,120,160,0.12);transform:translateY(-6px)}
+    .chip[aria-disabled="true"]{opacity:0.7;cursor:not-allowed;pointer-events:none}
+    .letter{margin-top:12px;padding:18px;border-radius:14px;background:linear-gradient(180deg,#fff,#fff9fb);border:1px solid rgba(0,0,0,0.03);box-shadow:0 12px 30px rgba(72,40,90,0.04);line-height:1.9;color:#333;white-space:pre-wrap;font-size:15px}
+    footer{display:flex;justify-content:space-between;align-items:center;margin-top:18px;color:var(--muted);font-size:13px}
+    #resetBtn{font-size:12px;padding:6px 10px;border-radius:8px;background:transparent;border:1px dashed rgba(0,0,0,0.06);cursor:pointer;color:var(--muted)}
+    #resetBtn:hover{background:rgba(0,0,0,0.02)}
+    @media (max-width:640px){.wrap{margin:12px;padding:18px 14px 24px}.btn-row{height:220px}.question{font-size:18px}}
+  </style>
+</head>
+<body>
+  <div class="wrap" role="main">
+    <header>
+      <div class="logo" aria-hidden="true">💌</div>
+      <h1>給 Karen 的可愛邀約</h1>
+    </header>
+
+    <div class="stage" id="stage1">
+      <div class="question">Karen 要不要跟我去約會？</div>
+      <div class="btn-row" id="btnRow">
+        <button class="btn btn--primary" id="yesBtn" aria-label="好哦">好哦 <span class="heart" aria-hidden="true"></span></button>
+      </div>
+      <div class="speech">靠近或點「否」它會跑掉喔～</div>
+      <button class="btn btn--soft" id="noBtn" aria-label="否" title="否" tabindex="0">否</button>
+    </div>
+
+    <div class="stage hidden" id="stage2">
+      <div class="question">選擇約會日期</div>
+      <div class="date-row">
+        <input type="date" id="dateInput" aria-label="約會日期" />
+        <button class="btn btn--primary" id="confirmDate">就這天！</button>
+      </div>
+      <div class="tiny">選好日期後點「就這天！」繼續。選擇確定後將無法更改。</div>
+    </div>
+
+    <div class="stage hidden" id="stage3">
+      <div class="question">想吃什麼呢？（選一項）</div>
+      <div class="food-list" id="foodList">
+        <div class="chip" tabindex="0" data-val="火鍋">火鍋</div>
+        <div class="chip" tabindex="0" data-val="肉肉">肉肉</div>
+        <div class="chip" tabindex="0" data-val="泰國野">泰國野</div>
+        <div class="chip" tabindex="0" data-val="韓國嘢">韓國嘢</div>
+        <div class="chip" tabindex="0" data-val="米線">米線</div>
+        <div class="chip" tabindex="0" data-val="拉麵">拉麵</div>
+      </div>
+      <div style="margin-top:14px;">
+        <button class="btn btn--primary" id="toLetter" disabled>送出選擇，去看情書</button>
+      </div>
+      <div class="tiny">送出後將無法更改食物選擇。</div>
+    </div>
+
+    <div class="stage hidden" id="stage4">
+      <div class="question">給 Karen 的情書</div>
+      <div class="letter" id="letter">
+親愛的 Karen，
+
+每次想到你，心裡就會悄悄冒出一朵小花，好像整片天都變得甜甜的。你的笑像糖衣一樣溫柔，讓人不自覺想靠近，也想把最溫暖的事情都給你。
+
+（以下為你選擇的約會資訊）
+約會日期：<span id="letterDate">尚未選擇</span>
+想吃的食物：<span id="letterFood">尚未選擇</span>
+
+如果可以的話，我想邀請你出來走走，吃一頓我們會記得很久的晚餐，然後一起笑到肚子痛。哪怕只是牽著手散步、分享一碗熱呼呼的麵，也覺得是小小的幸福。
+
+Karen，願不願意和我一起把普通的日子，變成有糖、有光的回憶呢？我在這裡，準備好帶著笨笨的笑容，等你的「好哦 ♥」。
+
+永遠在原地等你的人，
+（一直想見你的我）
+      </div>
+
+      <div style="margin-top:12px;">
+        <button class="btn btn--soft" id="againBtn">再 看一次</button>
+      </div>
+    </div>
+
+    <footer>
+      <div>卡通可愛版 • 淺色主題</div>
+      <div style="display:flex;gap:8px;align-items:center;">
+        <div>Made with 💖 for Karen</div>
+        <button id="resetBtn" title="清除儲存資料（需確認）">重置</button>
+      </div>
+    </footer>
+  </div>
+
+  <script>
+    const STORAGE_KEY = 'karen_invite_v1';
+    const stage1 = document.getElementById('stage1');
+    const stage2 = document.getElementById('stage2');
+    const stage3 = document.getElementById('stage3');
+    const stage4 = document.getElementById('stage4');
+    const yesBtn = document.getElementById('yesBtn');
+    const noBtn = document.getElementById('noBtn');
+    const dateInput = document.getElementById('dateInput');
+    const confirmDate = document.getElementById('confirmDate');
+    const toLetter = document.getElementById('toLetter');
+    const againBtn = document.getElementById('againBtn');
+    const resetBtn = document.getElementById('resetBtn');
+    const letterDateSpan = document.getElementById('letterDate');
+    const letterFoodSpan = document.getElementById('letterFood');
+
+    let state = { stage: 1, date: null, food: null, moveCount: 0 };
+
+    function saveState(){
+      try { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); }
+      catch(e){ console.warn('save failed', e); }
+    }
+    function loadState(){
+      try {
+        const raw = localStorage.getItem(STORAGE_KEY);
+        if (!raw) return;
+        const parsed = JSON.parse(raw);
+        if (parsed && typeof parsed === 'object') state = { ...state, ...parsed };
+      } catch(e){ console.warn('load failed', e); }
+    }
+    function applyStateToUI(){
+      stage1.classList.toggle('hidden', state.stage > 1);
+      stage2.classList.toggle('hidden', state.stage !== 2);
+      stage3.classList.toggle('hidden', state.stage !== 3);
+      stage4.classList.toggle('hidden', state.stage !== 4);
+
+      const s = Math.min(1 + (state.moveCount || 0) * 0.1, 2.4);
+      yesBtn.style.transform = `scale(${s})`;
+
+      if (state.date) {
+        dateInput.value = state.date;
+        dateInput.setAttribute('disabled','true');
+        confirmDate.setAttribute('disabled','true');
+      } else {
+        dateInput.removeAttribute('disabled');
+        confirmDate.removeAttribute('disabled');
+      }
+
+      document.querySelectorAll('.chip').forEach(chip => {
+        const val = chip.dataset.val || chip.textContent.trim();
+        chip.classList.toggle('selected', state.food === val);
+        if (state.food) chip.setAttribute('aria-disabled','true'); else chip.removeAttribute('aria-disabled');
+      });
+
+      if (state.food) toLetter.setAttribute('disabled','true'); else toLetter.removeAttribute('disabled');
+
+      letterDateSpan.textContent = state.date || '尚未選擇';
+      letterFoodSpan.textContent = state.food || '尚未選擇';
+
+      noBtn.style.display = state.stage > 1 ? 'none' : '';
+    }
+
+    let lastMove = 0;
+    const COOLDOWN = 320;
+    const PROX = 110;
+    function initNoPos(){
+      const x = Math.max(18, Math.min(window.innerWidth - 110, Math.round(window.innerWidth * 0.72)));
+      const y = Math.max(70, Math.round(window.innerHeight * 0.28));
+      noBtn.style.left = x + 'px';
+      noBtn.style.top = y + 'px';
+    }
+    function moveNoRandom(){
+      if (state.stage > 1) return;
+      const now = Date.now();
+      if (now - lastMove < COOLDOWN) return;
+      lastMove = now;
+
+      const rect = noBtn.getBoundingClientRect();
+      const padding = 12;
+      const maxLeft = Math.max(window.innerWidth - rect.width - padding, padding);
+      const maxTop = Math.max(window.innerHeight - rect.height - padding, padding);
+
+      let left, top;
+      const mx = window._lastX || window.innerWidth / 2;
+      const my = window._lastY || window.innerHeight / 2;
+      for (let i = 0; i < 10; i++) {
+        left = Math.round(padding + Math.random() * (maxLeft - padding));
+        top = Math.round(padding + Math.random() * (maxTop - padding));
+        const cx = left + rect.width / 2;
+        const cy = top + rect.height / 2;
+        if (Math.hypot(mx - cx, my - cy) > PROX * 0.85) break;
+      }
+
+      noBtn.style.left = left + 'px';
+      noBtn.style.top = top + 'px';
+
+      state.moveCount = (state.moveCount || 0) + 1;
+      saveState();
+      applyStateToUI();
+    }
+
+    function pointerHandler(e){
+      const x = e.clientX ?? (e.touches && e.touches[0] && e.touches[0].clientX);
+      const y = e.clientY ?? (e.touches && e.touches[0] && e.touches[0].clientY);
+      if (x == null || y == null) return;
+      window._lastX = x; window._lastY = y;
+      const r = noBtn.getBoundingClientRect();
+      const cx = r.left + r.width/2;
+      const cy = r.top + r.height/2;
+      const d = Math.hypot(x - cx, y - cy);
+      if (d < PROX) moveNoRandom();
+    }
+
+    window.addEventListener('pointermove', pointerHandler, {passive:true});
+    window.addEventListener('mousemove', pointerHandler, {passive:true});
+    window.addEventListener('touchmove', pointerHandler, {passive:true});
+
+    noBtn.addEventListener('click', (e)=>{ e.preventDefault(); moveNoRandom(); });
+    noBtn.addEventListener('mousedown', (e)=>{ e.preventDefault(); moveNoRandom(); }, {passive:false});
+    noBtn.addEventListener('touchstart', (e)=>{ e.preventDefault(); moveNoRandom(); }, {passive:false});
+    noBtn.addEventListener('focus', ()=> moveNoRandom());
+
+    yesBtn.addEventListener('click', ()=> {
+      if (state.stage > 1) return;
+      state.stage = 2;
+      saveState();
+      applyStateToUI();
+      if (!state.date) {
+        const d = new Date();
+        const y = d.getFullYear();
+        const m = String(d.getMonth() + 1).padStart(2, '0');
+        const day = String(d.getDate()).padStart(2, '0');
+        dateInput.value = `${y}-${m}-${day}`;
+      }
+      setTimeout(()=> dateInput.focus(), 100);
+    });
+
+    confirmDate.addEventListener('click',()=>{
+      if (state.date) return;
+      if (!dateInput.value) { alert('請先選擇日期喔～'); dateInput.focus(); return; }
+      state.date = dateInput.value;
+      state.stage = 3;
+      saveState();
+      applyStateToUI();
+    });
+
+    let chosenFood = state.food || null;
+    document.querySelectorAll('.chip').forEach(chip=>{
+      chip.addEventListener('click', ()=> {
+        if (state.food) return;
+        document.querySelectorAll('.chip').forEach(c=>c.classList.remove('selected'));
+        chip.classList.add('selected');
+        chosenFood = chip.dataset.val || chip.textContent.trim();
+        toLetter.removeAttribute('disabled');
+      });
+      chip.addEventListener('keydown', (e)=> {
+        if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); chip.click(); }
+      });
+    });
+
+    toLetter.addEventListener('click',()=>{
+      if (state.food) return;
+      if (!chosenFood) { alert('請先選擇想吃的食物～'); return; }
+      state.food = chosenFood;
+      state.stage = 4;
+      saveState();
+      applyStateToUI();
+      setTimeout(()=> stage4.scrollIntoView({behavior:'smooth', block:'start'}), 50);
+    });
+
+    againBtn.addEventListener('click',()=>{
+      window.scrollTo({ top: document.body.scrollHeight, behavior:'smooth' });
+    });
+
+    resetBtn.addEventListener('click',()=>{
+      if (!confirm('確定要清除儲存的邀約資料並重置頁面嗎？')) return;
+      try { localStorage.removeItem(STORAGE_KEY); } catch(e){}
+      state = { stage:1, date:null, food:null, moveCount:0 };
+      saveState();
+      location.reload();
+    });
+
+    loadState();
+    applyStateToUI();
+    initNoPos();
+  </script>
+</body>
+</html>
